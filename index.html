@@ -1,10 +1,80 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>My First Website</title>
+  <meta charset="UTF-8">
+  <title>家計簿アプリ</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    header { font-size: 20px; font-weight: bold; margin-bottom: 20px; }
+    nav button {
+      margin-right: 10px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    section { display: none; margin-top: 20px; }
+    section.active { display: block; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+  </style>
 </head>
 <body>
-    <h1>こんにちは！GitHub Pagesで公開できました</h1>
+  <header>家計簿アプリ</header>
+
+  <!-- ナビゲーション（タブ切り替え） -->
+  <nav>
+    <button onclick="showPage('input')">入力</button>
+    <button onclick="showPage('list')">一覧</button>
+    <button onclick="showPage('report')">レポート</button>
+  </nav>
+
+  <!-- 入力画面 -->
+  <section id="input" class="active">
+    <h2>入力画面</h2>
+    <form>
+      <label>日付: <input type="date"></label><br><br>
+      <label>金額: <input type="number"></label><br><br>
+      <label>
+        区分:
+        <input type="radio" name="type">収入
+        <input type="radio" name="type">支出
+      </label><br><br>
+      <label>カテゴリ:
+        <select>
+          <option>食費</option>
+          <option>交通費</option>
+          <option>給与</option>
+          <option>その他</option>
+        </select>
+      </label><br><br>
+      <label>メモ: <input type="text"></label><br><br>
+      <button type="button">追加</button>
+    </form>
+  </section>
+
+  <!-- 一覧画面 -->
+  <section id="list">
+    <h2>一覧画面</h2>
+    <table>
+      <tr><th>日付</th><th>区分</th><th>カテゴリ</th><th>金額</th><th>メモ</th></tr>
+      <tr><td>2025-08-23</td><td>支出</td><td>食費</td><td>1200円</td><td>ランチ</td></tr>
+      <tr><td>2025-08-23</td><td>収入</td><td>給与</td><td>300000円</td><td>8月分</td></tr>
+    </table>
+  </section>
+
+  <!-- レポート画面 -->
+  <section id="report">
+    <h2>レポート画面</h2>
+    <p>ここにグラフが入ります（Chart.js予定）</p>
+  </section>
+
+  <script>
+    // タブ切り替え処理
+    function showPage(pageId) {
+      document.querySelectorAll("section").forEach(sec => {
+        sec.classList.remove("active");
+      });
+      document.getElementById(pageId).classList.add("active");
+    }
+  </script>
 </body>
 </html>
