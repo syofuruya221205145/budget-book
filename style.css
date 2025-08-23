@@ -4,44 +4,75 @@ body {
   font-size: 16px;
 }
 
-header {
-  font-size: 1.4em;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-nav {
+/* PCヘッダー */
+.pc-nav {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column; /* タイトルとタブを縦方向に配置 */
   gap: 5px;
 }
 
-nav button {
-  flex: 1;
-  min-width: 80px;
+.pc-nav .title {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.pc-nav .tabs {
+  display: flex; /* 横並びタブ */
+  gap: 5px;
+}
+
+.pc-nav .tab-button {
+  flex: 1;       /* 均等幅 */
   padding: 8px;
   font-size: 14px;
   cursor: pointer;
 }
 
-section {
-  display: none;
-  margin-top: 20px;
+.pc-nav .tab-button.active {
+  background: #36A2EB;
+  color: #fff;
 }
 
-section.active {
-  display: block;
-}
-
-form label {
-  display: block;
-  margin-bottom: 10px;
-}
-
-input, select, button {
+/* モバイル用タブ（フッター） */
+.mobile-nav {
+  display: none !important; /* デフォルト非表示 */
+  position: fixed;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  box-sizing: border-box;
+  display: flex;
+  border-top: 1px solid #ccc;
+  background: #f8f8f8;
+  z-index: 100;
 }
+
+.mobile-nav .tab-button {
+  flex: 1;
+  padding: 12px 0;
+  font-size: 16px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.mobile-nav .tab-button.active {
+  background: #36A2EB;
+  color: #fff;
+}
+
+/* スマホ表示切替 */
+@media screen and (max-width: 768px) {
+  .pc-nav { display: none !important; }    /* PCタブ非表示 */
+  .mobile-nav { display: flex !important; } /* モバイルタブ表示 */
+}
+
+/* セクション切り替え */
+section { display: none; margin-top: 20px; }
+section.active { display: block; }
+
+form label { display: block; margin-bottom: 10px; }
+input, select, button { width: 100%; box-sizing: border-box; }
 
 table {
   border-collapse: collapse;
@@ -49,15 +80,7 @@ table {
   font-size: 14px;
   margin-top: 10px;
 }
+th, td { border: 1px solid #ccc; padding: 6px; text-align: center; word-break: break-word; }
 
-th, td {
-  border: 1px solid #ccc;
-  padding: 6px;
-  text-align: center;
-  word-break: break-word;
-}
+canvas { max-width: 100% !important; height: auto !important; }
 
-canvas {
-  max-width: 100% !important;
-  height: auto !important;
-}
