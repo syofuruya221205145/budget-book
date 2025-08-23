@@ -3,20 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>家計簿アプリ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body { font-family: sans-serif; margin: 20px; }
-    header { font-size: 20px; font-weight: bold; margin-bottom: 20px; }
-    nav button {
-      margin-right: 10px;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-    section { display: none; margin-top: 20px; }
-    section.active { display: block; }
-    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-  </style>
+  <!-- CSSファイルを読み込み -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>家計簿アプリ</header>
@@ -72,131 +62,13 @@
     </label>
 
     <h3>カテゴリ別支出割合</h3>
-    <canvas id="categoryChart" width="400" height="200"></canvas>
+    <canvas id="categoryChart"></canvas>
 
     <h3>月ごとの収支推移</h3>
-    <canvas id="monthlyChart" width="400" height="200"></canvas>
+    <canvas id="monthlyChart"></canvas>
   </section>
 
-  <script>
-    // -------------------------------
-    // タブ切り替え
-    // -------------------------------
-    function showPage(pageId) {
-      document.querySelectorAll("section").forEach(sec => {
-        sec.classList.remove("active");
-      });
-      document.getElementById(pageId).classList.add("active");
-    }
-
-    // -------------------------------
-    // LocalStorage連携
-    // -------------------------------
-    let records = JSON.parse(localStorage.getItem("records")) || [];
-
-    function saveRecord() {
-      const date = document.querySelector("#input input[type='date']").value;
-      const amount = Number(document.querySelector("#input input[type='number']").value);
-      const type = document.querySelector("#input input[name='type']:checked")?.value;
-      const category = document.querySelector("#input select").value;
-      const memo = document.querySelector("#input input[type='text']").value;
-
-      if (!date || !amount || !type) {
-        alert("日付・金額・区分は必須です");
-        return;
-      }
-
-      const id = Date.now();
-      const record = { id, date, amount, type, category, memo };
-
-      records.push(record);
-      localStorage.setItem("records", JSON.stringify(records));
-
-      alert("保存しました！");
-      showRecords();
-      clearForm();
-      drawCategoryChart(document.getElementById('monthSelect').value);
-      drawMonthlyChart();
-    }
-
-    function clearForm() {
-      document.querySelector("#input form").reset();
-    }
-
-    function showRecords() {
-      const table = document.querySelector("#list table");
-      table.innerHTML = `<tr><th>日付</th><th>区分</th><th>カテゴリ</th><th>金額</th><th>メモ</th></tr>`;
-      records.forEach(r => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${r.date}</td>
-          <td>${r.type}</td>
-          <td>${r.category}</td>
-          <td>${r.amount}</td>
-          <td>${r.memo}</td>
-        `;
-        table.appendChild(tr);
-      });
-    }
-
-    document.querySelector("#input button").addEventListener("click", saveRecord);
-    showRecords();
-
-    // -------------------------------
-    // レポート用グラフ
-    // -------------------------------
-    function drawCategoryChart(month) {
-      const ctx = document.getElementById('categoryChart').getContext('2d');
-      const filtered = records.filter(r => r.type === "支出" && r.date.startsWith(month));
-      const categoryMap = {};
-      filtered.forEach(r => {
-        categoryMap[r.category] = (categoryMap[r.category] || 0) + r.amount;
-      });
-
-      const labels = Object.keys(categoryMap);
-      const data = Object.values(categoryMap);
-
-      if (window.categoryChart) window.categoryChart.destroy();
-
-      window.categoryChart = new Chart(ctx, {
-        type: 'pie',
-        data: { labels, datasets: [{ data, backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'] }] }
-      });
-    }
-
-    function drawMonthlyChart() {
-      const ctx = document.getElementById('monthlyChart').getContext('2d');
-      const monthMap = {};
-      records.forEach(r => {
-        const m = r.date.slice(0,7);
-        if (!monthMap[m]) monthMap[m] = {収入:0, 支出:0};
-        monthMap[m][r.type] += r.amount;
-      });
-
-      const labels = Object.keys(monthMap).sort();
-      const incomeData = labels.map(l => monthMap[l].収入);
-      const expenseData = labels.map(l => monthMap[l].支出);
-
-      if (window.monthlyChart) window.monthlyChart.destroy();
-
-      window.monthlyChart = new Chart(ctx, {
-        type: 'bar',
-        data: { labels, datasets: [
-          { label: '収入', data: incomeData, backgroundColor: '#36A2EB' },
-          { label: '支出', data: expenseData, backgroundColor: '#FF6384' }
-        ]},
-        options: { responsive: true, scales: { y: { beginAtZero: true } } }
-      });
-    }
-
-    document.getElementById('monthSelect').addEventListener('change', e => {
-      drawCategoryChart(e.target.value);
-    });
-
-    // 初期表示
-    drawMonthlyChart();
-    drawCategoryChart(document.getElementById('monthSelect').value);
-  </script>
+  <!-- JSファイルを読み込み -->
+  <script src="script.js"></script>
 </body>
 </html>
-// test
