@@ -24,7 +24,7 @@ document.querySelectorAll(".category-icon").forEach(icon => {
 
 function saveRecord() {
   const date = document.querySelector("#input input[type='date']").value;
-  const amount = Number(document.querySelector("#input input[type='number']").value);
+  const amount = Number(document.getElementById("amount").value);
   const type = document.querySelector("#input input[name='type']:checked")?.value;
   const category = document.getElementById("selectedCategory").value;
   const memo = document.querySelector("#input input[type='text']").value;
@@ -56,7 +56,7 @@ function showRecords() {
   table.innerHTML = `<tr><th>日付</th><th>区分</th><th>カテゴリ</th><th>金額</th><th>メモ</th></tr>`;
   records.forEach(r => {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${r.date}</td><td>${r.type}</td><td>${r.category}</td><td>${r.amount}</td><td>${r.memo}</td>`;
+    tr.innerHTML = `<td>${r.date}</td><td>${r.type}</td><td>${r.category}</td><td>${r.amount} 円</td><td>${r.memo}</td>`;
     table.appendChild(tr);
   });
 }

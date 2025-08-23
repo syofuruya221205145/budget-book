@@ -25,7 +25,12 @@
     <h2>入力画面</h2>
     <form>
       <label>日付: <input type="date"></label>
-      <label>金額: <input type="number"></label>
+      <label>金額: 
+        <div class="input-group">
+          <input type="number" id="amount" />
+          <span class="unit">円</span>
+        </div>
+      </label>
 
       <div class="type-group">
         <label><input type="radio" name="type" value="収入">収入</label>

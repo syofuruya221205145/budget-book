@@ -113,6 +113,25 @@ input, select, button { width: 100%; box-sizing: border-box; }
   background: #e0f2ff;
 }
 
+/* 金額入力欄に円を表示 */
+.input-group {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+.input-group input {
+  width: 100%;
+  padding-right: 2em;
+  box-sizing: border-box;
+}
+.input-group .unit {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
