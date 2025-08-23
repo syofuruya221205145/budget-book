@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>家計簿アプリ</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body { font-family: sans-serif; margin: 20px; }
     header { font-size: 20px; font-weight: bold; margin-bottom: 20px; }
@@ -20,7 +21,7 @@
 <body>
   <header>家計簿アプリ</header>
 
-  <!-- ナビゲーション（タブ切り替え） -->
+  <!-- ナビゲーション -->
   <nav>
     <button onclick="showPage('input')">入力</button>
     <button onclick="showPage('list')">一覧</button>
@@ -35,8 +36,8 @@
       <label>金額: <input type="number"></label><br><br>
       <label>
         区分:
-        <input type="radio" name="type">収入
-        <input type="radio" name="type">支出
+        <input type="radio" name="type" value="収入">収入
+        <input type="radio" name="type" value="支出">支出
       </label><br><br>
       <label>カテゴリ:
         <select>
@@ -56,25 +57,145 @@
     <h2>一覧画面</h2>
     <table>
       <tr><th>日付</th><th>区分</th><th>カテゴリ</th><th>金額</th><th>メモ</th></tr>
-      <tr><td>2025-08-23</td><td>支出</td><td>食費</td><td>1200円</td><td>ランチ</td></tr>
-      <tr><td>2025-08-23</td><td>収入</td><td>給与</td><td>300000円</td><td>8月分</td></tr>
     </table>
   </section>
 
   <!-- レポート画面 -->
   <section id="report">
     <h2>レポート画面</h2>
-    <p>ここにグラフが入ります（Chart.js予定）</p>
+
+    <label>表示期間:
+      <select id="monthSelect">
+        <option value="2025-08">2025年8月</option>
+        <option value="2025-07">2025年7月</option>
+      </select>
+    </label>
+
+    <h3>カテゴリ別支出割合</h3>
+    <canvas id="categoryChart" width="400" height="200"></canvas>
+
+    <h3>月ごとの収支推移</h3>
+    <canvas id="monthlyChart" width="400" height="200"></canvas>
   </section>
 
   <script>
-    // タブ切り替え処理
+    // -------------------------------
+    // タブ切り替え
+    // -------------------------------
     function showPage(pageId) {
       document.querySelectorAll("section").forEach(sec => {
         sec.classList.remove("active");
       });
       document.getElementById(pageId).classList.add("active");
     }
+
+    // -------------------------------
+    // LocalStorage連携
+    // -------------------------------
+    let records = JSON.parse(localStorage.getItem("records")) || [];
+
+    function saveRecord() {
+      const date = document.querySelector("#input input[type='date']").value;
+      const amount = Number(document.querySelector("#input input[type='number']").value);
+      const type = document.querySelector("#input input[name='type']:checked")?.value;
+      const category = document.querySelector("#input select").value;
+      const memo = document.querySelector("#input input[type='text']").value;
+
+      if (!date || !amount || !type) {
+        alert("日付・金額・区分は必須です");
+        return;
+      }
+
+      const id = Date.now();
+      const record = { id, date, amount, type, category, memo };
+
+      records.push(record);
+      localStorage.setItem("records", JSON.stringify(records));
+
+      alert("保存しました！");
+      showRecords();
+      clearForm();
+      drawCategoryChart(document.getElementById('monthSelect').value);
+      drawMonthlyChart();
+    }
+
+    function clearForm() {
+      document.querySelector("#input form").reset();
+    }
+
+    function showRecords() {
+      const table = document.querySelector("#list table");
+      table.innerHTML = `<tr><th>日付</th><th>区分</th><th>カテゴリ</th><th>金額</th><th>メモ</th></tr>`;
+      records.forEach(r => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${r.date}</td>
+          <td>${r.type}</td>
+          <td>${r.category}</td>
+          <td>${r.amount}</td>
+          <td>${r.memo}</td>
+        `;
+        table.appendChild(tr);
+      });
+    }
+
+    document.querySelector("#input button").addEventListener("click", saveRecord);
+    showRecords();
+
+    // -------------------------------
+    // レポート用グラフ
+    // -------------------------------
+    function drawCategoryChart(month) {
+      const ctx = document.getElementById('categoryChart').getContext('2d');
+      const filtered = records.filter(r => r.type === "支出" && r.date.startsWith(month));
+      const categoryMap = {};
+      filtered.forEach(r => {
+        categoryMap[r.category] = (categoryMap[r.category] || 0) + r.amount;
+      });
+
+      const labels = Object.keys(categoryMap);
+      const data = Object.values(categoryMap);
+
+      if (window.categoryChart) window.categoryChart.destroy();
+
+      window.categoryChart = new Chart(ctx, {
+        type: 'pie',
+        data: { labels, datasets: [{ data, backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'] }] }
+      });
+    }
+
+    function drawMonthlyChart() {
+      const ctx = document.getElementById('monthlyChart').getContext('2d');
+      const monthMap = {};
+      records.forEach(r => {
+        const m = r.date.slice(0,7);
+        if (!monthMap[m]) monthMap[m] = {収入:0, 支出:0};
+        monthMap[m][r.type] += r.amount;
+      });
+
+      const labels = Object.keys(monthMap).sort();
+      const incomeData = labels.map(l => monthMap[l].収入);
+      const expenseData = labels.map(l => monthMap[l].支出);
+
+      if (window.monthlyChart) window.monthlyChart.destroy();
+
+      window.monthlyChart = new Chart(ctx, {
+        type: 'bar',
+        data: { labels, datasets: [
+          { label: '収入', data: incomeData, backgroundColor: '#36A2EB' },
+          { label: '支出', data: expenseData, backgroundColor: '#FF6384' }
+        ]},
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+      });
+    }
+
+    document.getElementById('monthSelect').addEventListener('change', e => {
+      drawCategoryChart(e.target.value);
+    });
+
+    // 初期表示
+    drawMonthlyChart();
+    drawCategoryChart(document.getElementById('monthSelect').value);
   </script>
 </body>
 </html>
