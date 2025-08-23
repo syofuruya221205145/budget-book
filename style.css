@@ -23,7 +23,7 @@ body {
 }
 
 .pc-nav .tab-button {
-  flex: 1; /* タブ数が増えても均等幅 */
+  flex: 1;
   padding: 8px;
   font-size: 14px;
   cursor: pointer;
@@ -80,6 +80,38 @@ input, select, button { width: 100%; box-sizing: border-box; }
   align-items: center;
 }
 .type-group label { display: flex; align-items: center; gap: 5px; }
+
+/* カテゴリアイコン */
+.category-group {
+  margin-bottom: 15px;
+}
+.category-icons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.category-icon {
+  width: 80px;
+  height: 80px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 24px;
+  background: #f9f9f9;
+  transition: all 0.2s;
+}
+.category-icon span {
+  font-size: 12px;
+  margin-top: 5px;
+}
+.category-icon.selected {
+  border-color: #36A2EB;
+  background: #e0f2ff;
+}
 
 table {
   border-collapse: collapse;

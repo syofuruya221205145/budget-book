@@ -32,14 +32,17 @@
         <label><input type="radio" name="type" value="支出">支出</label>
       </div>
 
-      <label>カテゴリ:
-        <select>
-          <option>食費</option>
-          <option>交通費</option>
-          <option>給与</option>
-          <option>その他</option>
-        </select>
-      </label>
+      <div class="category-group">
+        <p>カテゴリ:</p>
+        <div class="category-icons">
+          <div class="category-icon" data-value="食費">🍚<span>食費</span></div>
+          <div class="category-icon" data-value="交通費">🚌<span>交通費</span></div>
+          <div class="category-icon" data-value="給与">💰<span>給与</span></div>
+          <div class="category-icon" data-value="その他">📦<span>その他</span></div>
+        </div>
+        <input type="hidden" id="selectedCategory">
+      </div>
+
       <label>メモ: <input type="text"></label>
       <button type="button">追加</button>
     </form>
