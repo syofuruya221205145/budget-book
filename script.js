@@ -1,4 +1,4 @@
-// タブ切り替え（PC・モバイル両方対応）
+// タブ切り替え
 function showPage(pageId) {
   document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
   document.getElementById(pageId).classList.add("active");

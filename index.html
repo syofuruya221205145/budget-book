@@ -1,4 +1,3 @@
-<!--家計簿アプリ-->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -10,26 +9,27 @@
 </head>
 <body>
   <!-- PC用タブ（上部ヘッダー） -->
-<header class="pc-nav">
-  <div class="title">家計簿アプリ</div>
-  <div class="tabs">
-    <button onclick="showPage('input')" class="tab-button active">入力</button>
-    <button onclick="showPage('list')" class="tab-button">一覧</button>
-    <button onclick="showPage('report')" class="tab-button">レポート</button>
-  </div>
-</header>
+  <header class="pc-nav">
+    <div class="title">家計簿アプリ</div>
+    <div class="tabs">
+      <button onclick="showPage('input')" class="tab-button active">入力</button>
+      <button onclick="showPage('list')" class="tab-button">一覧</button>
+      <button onclick="showPage('report')" class="tab-button">レポート</button>
+    </div>
+  </header>
 
   <!-- 入力画面 -->
   <section id="input" class="active">
     <h2>入力画面</h2>
     <form>
-      <label>日付: <input type="date"></label><br><br>
-      <label>金額: <input type="number"></label><br><br>
-      <label>
-        区分:
-        <input type="radio" name="type" value="収入">収入
-        <input type="radio" name="type" value="支出">支出
-      </label><br><br>
+      <label>日付: <input type="date"></label>
+      <label>金額: <input type="number"></label>
+
+      <div class="type-group">
+        <label><input type="radio" name="type" value="収入">収入</label>
+        <label><input type="radio" name="type" value="支出">支出</label>
+      </div>
+
       <label>カテゴリ:
         <select>
           <option>食費</option>
@@ -37,8 +37,8 @@
           <option>給与</option>
           <option>その他</option>
         </select>
-      </label><br><br>
-      <label>メモ: <input type="text"></label><br><br>
+      </label>
+      <label>メモ: <input type="text"></label>
       <button type="button">追加</button>
     </form>
   </section>
