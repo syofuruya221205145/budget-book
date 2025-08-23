@@ -13,14 +13,26 @@ function showPage(pageId) {
 // LocalStorage連携
 let records = JSON.parse(localStorage.getItem("records")) || [];
 
+// カテゴリ選択処理
+document.querySelectorAll(".category-icon").forEach(icon => {
+  icon.addEventListener("click", () => {
+    document.querySelectorAll(".category-icon").forEach(i => i.classList.remove("selected"));
+    icon.classList.add("selected");
+    document.getElementById("selectedCategory").value = icon.dataset.value;
+  });
+});
+
 function saveRecord() {
   const date = document.querySelector("#input input[type='date']").value;
   const amount = Number(document.querySelector("#input input[type='number']").value);
   const type = document.querySelector("#input input[name='type']:checked")?.value;
-  const category = document.querySelector("#input select").value;
+  const category = document.getElementById("selectedCategory").value;
   const memo = document.querySelector("#input input[type='text']").value;
 
-  if (!date || !amount || !type) { alert("日付・金額・区分は必須です"); return; }
+  if (!date || !amount || !type || !category) { 
+    alert("日付・金額・区分・カテゴリは必須です"); 
+    return; 
+  }
 
   const record = { id: Date.now(), date, amount, type, category, memo };
   records.push(record);
@@ -33,7 +45,11 @@ function saveRecord() {
   drawMonthlyChart();
 }
 
-function clearForm() { document.querySelector("#input form").reset(); }
+function clearForm() { 
+  document.querySelector("#input form").reset(); 
+  document.getElementById("selectedCategory").value = "";
+  document.querySelectorAll(".category-icon").forEach(i => i.classList.remove("selected"));
+}
 
 function showRecords() {
   const table = document.querySelector("#list table");
@@ -58,7 +74,11 @@ function drawCategoryChart(month) {
   const data = Object.values(categoryMap);
 
   if (window.categoryChart) window.categoryChart.destroy();
-  window.categoryChart = new Chart(ctx, { type: 'pie', data: { labels, datasets: [{ data, backgroundColor: ['#FF6384','#36A2EB','#FFCE56','#4BC0C0'] }]}, options: { responsive:true }});
+  window.categoryChart = new Chart(ctx, { 
+    type: 'pie', 
+    data: { labels, datasets: [{ data, backgroundColor: ['#FF6384','#36A2EB','#FFCE56','#4BC0C0'] }]}, 
+    options: { responsive:true }
+  });
 }
 
 function drawMonthlyChart() {
@@ -75,7 +95,14 @@ function drawMonthlyChart() {
   const expenseData = labels.map(l => monthMap[l].支出);
 
   if (window.monthlyChart) window.monthlyChart.destroy();
-  window.monthlyChart = new Chart(ctx, { type: 'bar', data: { labels, datasets: [{label:'収入',data:incomeData,backgroundColor:'#36A2EB'}, {label:'支出',data:expenseData,backgroundColor:'#FF6384'}]}, options:{ responsive:true, scales:{y:{beginAtZero:true}}}});
+  window.monthlyChart = new Chart(ctx, { 
+    type: 'bar', 
+    data: { labels, datasets: [
+      {label:'収入',data:incomeData,backgroundColor:'#36A2EB'}, 
+      {label:'支出',data:expenseData,backgroundColor:'#FF6384'}
+    ]}, 
+    options:{ responsive:true, scales:{y:{beginAtZero:true}}}
+  });
 }
 
 document.getElementById('monthSelect').addEventListener('change', e => drawCategoryChart(e.target.value));
