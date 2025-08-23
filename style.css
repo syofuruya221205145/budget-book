@@ -23,7 +23,7 @@ body {
 }
 
 .pc-nav .tab-button {
-  flex: 1;
+  flex: 1; /* タブ数が増えても均等幅 */
   padding: 8px;
   font-size: 14px;
   cursor: pointer;

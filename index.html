@@ -1,3 +1,4 @@
+<!--開発段階-->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -15,6 +16,7 @@
       <button onclick="showPage('input')" class="tab-button active">入力</button>
       <button onclick="showPage('list')" class="tab-button">一覧</button>
       <button onclick="showPage('report')" class="tab-button">レポート</button>
+      <button onclick="showPage('settings')" class="tab-button">設定</button>
     </div>
   </header>
 
@@ -68,11 +70,23 @@
     <canvas id="monthlyChart"></canvas>
   </section>
 
+  <!-- 設定画面 -->
+  <section id="settings">
+    <h2>設定</h2>
+    <p>ここにアプリの使い方や利用規約などを記載できます。</p>
+    <ul>
+      <li>利用規約</li>
+      <li>アプリの使い方</li>
+      <li>プライバシーポリシー</li>
+    </ul>
+  </section>
+
   <!-- モバイル用タブ（フッター） -->
   <footer class="mobile-nav">
     <button onclick="showPage('input')" class="tab-button active">入力</button>
     <button onclick="showPage('list')" class="tab-button">一覧</button>
     <button onclick="showPage('report')" class="tab-button">レポート</button>
+    <button onclick="showPage('settings')" class="tab-button">設定</button>
   </footer>
 
   <script src="script.js"></script>
