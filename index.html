@@ -5,18 +5,19 @@
   <title>家計簿アプリ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- CSSファイルを読み込み -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>家計簿アプリ</header>
+  <!-- PC用タブ（上部ヘッダー） -->
+<header class="pc-nav">
+  <div class="title">家計簿アプリ</div>
+  <div class="tabs">
+    <button onclick="showPage('input')" class="tab-button active">入力</button>
+    <button onclick="showPage('list')" class="tab-button">一覧</button>
+    <button onclick="showPage('report')" class="tab-button">レポート</button>
+  </div>
+</header>
 
-  <!-- ナビゲーション -->
-  <nav>
-    <button onclick="showPage('input')">入力</button>
-    <button onclick="showPage('list')">一覧</button>
-    <button onclick="showPage('report')">レポート</button>
-  </nav>
 
   <!-- 入力画面 -->
   <section id="input" class="active">
@@ -53,7 +54,6 @@
   <!-- レポート画面 -->
   <section id="report">
     <h2>レポート画面</h2>
-
     <label>表示期間:
       <select id="monthSelect">
         <option value="2025-08">2025年8月</option>
@@ -68,7 +68,13 @@
     <canvas id="monthlyChart"></canvas>
   </section>
 
-  <!-- JSファイルを読み込み -->
+  <!-- モバイル用タブ（フッター） -->
+  <footer class="mobile-nav">
+    <button onclick="showPage('input')" class="tab-button active">入力</button>
+    <button onclick="showPage('list')" class="tab-button">一覧</button>
+    <button onclick="showPage('report')" class="tab-button">レポート</button>
+  </footer>
+
   <script src="script.js"></script>
 </body>
 </html>
